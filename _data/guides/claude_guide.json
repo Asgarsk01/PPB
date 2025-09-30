@@ -1,0 +1,176 @@
+{
+    "platform": "Claude Sonnet 4",
+    "version": "4.1",
+    "guide": {
+    "principles": [
+    {
+    "title": "Be Explicit and Use Specific Modifiers",
+    "content": "Claude 4 is trained for precise instruction following. To get high-quality or 'above and beyond' results, you must explicitly request the desired behavior using modifiers that encourage detail and complexity, rather than assuming the model will do it automatically. [cite: 3, 36, 37, 38]",
+    "keywords": ["explicit", "specific", "modifiers", "detailed", "quality", "precision", "unambiguous", "instruction", "comprehensive", "fully-featured"],
+    "detection_patterns": ["vague request", "make it better", "improve this", "simple instructions", "create an analytics dashboard", "needs more detail"]
+    },
+    {
+    "title": "Add Context and Motivation to Improve Performance",
+    "content": "Providing the background, context, or motivation behind your request helps Claude 4 better understand your goals and deliver more targeted responses. [cite: 40] This information should be front-loaded in the prompt to prevent the model from losing track of the main task. [cite: 41, 92, 93]",
+    "keywords": ["context", "motivation", "background", "goal", "understanding", "purpose", "domain", "front-load", "targeted"],
+    "detection_patterns": ["lacks context", "why do you need this?", "what's the purpose?", "for my project", "explain this concept", "no background info"]
+    },
+    {
+    "title": "Use Few-Shot Examples Vigilantly",
+    "content": "Few-shot prompting, or providing 2-5 concrete examples of the desired output, is a crucial technique. [cite: 42, 62] Claude 4 pays close attention to these examples, so ensure they precisely match the tone, structure, and style you want to encourage and do not contain any behaviors you wish to avoid. [cite: 11, 43, 44]",
+    "keywords": ["few-shot", "examples", "demonstration", "pattern matching", "style", "tone", "structure", "in-context learning", "vigilance"],
+    "detection_patterns": ["show me an example", "do it like this", "match this style", "in the following format", "here are some examples"]
+    },
+    {
+    "title": "Control Output Format and Structure",
+    "content": "To ensure consistent output, explicitly direct the format. Using XML tags is highly effective. [cite: 46, 83] It is more effective to use positive instructions (telling Claude what to do) rather than negative instructions (what not to do). [cite: 26, 47] Matching the prompt's style to the desired output style also helps. [cite: 27, 48]",
+    "keywords": ["format", "structure", "xml", "tags", "positive instruction", "style matching", "output control", "consistency", "prose"],
+    "detection_patterns": ["wrong format", "don't use lists", "make it a paragraph", "output is messy", "not the structure I wanted", "avoid markdown"]
+    },
+    {
+    "title": "Leverage Thinking and Step-by-Step Reasoning",
+    "content": "For complex tasks, prompt Claude to use its thinking and reasoning capabilities. [cite: 49] You can ask it to 'think step by step' (Chain-of-Thought) or guide its reflection after it gets new information by instructing it to 'carefully reflect on their quality and determine optimal next steps'. [cite: 50, 77]",
+    "keywords": ["reasoning", "thinking", "step-by-step", "decomposition", "chain-of-thought", "reflection", "interleaved thinking", "complex task", "analysis"],
+    "detection_patterns": ["complex problem", "think it through", "how did you get that?", "show your work", "solve this multi-step problem", "analyze this"]
+    },
+    {
+    "title": "Set Constraints and Boundaries",
+    "content": "Establishing explicit boundaries tells the AI what not to do, which helps prevent common failures and keeps responses focused. [cite: 51] Constraints can define length, limit the scope of content, or enforce mandatory rules like copyright limitations. [cite: 53]",
+    "keywords": ["constraints", "boundaries", "negative prompting", "rules", "limitations", "scope", "length", "word count", "guardrails"],
+    "detection_patterns": ["too long", "out of scope", "don't include X", "word limit", "must not", "strict rule", "stay within these limits"]
+    },
+    {
+    "title": "Influence the Depth of Automatic Research",
+    "content": "For queries requiring in-depth answers, you can influence how much automatic research Claude performs by using specific keywords. [cite: 54] Terms like 'deep dive,' 'comprehensive analysis,' 'evaluate,' or 'make a report' signal that a more thorough investigation is needed. [cite: 16, 55, 246]",
+    "keywords": ["research", "depth", "analysis", "keywords", "search", "evaluate", "assess", "report", "deep dive", "thoroughness"],
+    "detection_patterns": ["do some research on", "find information about", "analyze this topic", "make a report on", "give me a deep dive", "evaluate these options"]
+    },
+    {
+    "title": "Encourage Simultaneous Actions for Efficiency",
+    "content": "For complex requests that might require looking up multiple independent pieces of information, you can boost efficiency by explicitly telling the model to perform these actions at the same time. [cite: 21] A simple instruction like 'invoke all relevant tools simultaneously' can speed up the response. [cite: 248]",
+    "keywords": ["efficiency", "parallel", "simultaneous", "research", "multi-step", "performance", "speed", "concurrent", "actions"],
+    "detection_patterns": ["taking too long", "slow response", "can you do this faster", "multiple steps", "researching several topics"]
+    }
+    ],
+    "structural_elements": [
+    {
+    "title": "Use Explicit Delimiters (XML Tags)",
+    "content": "A highly effective method for controlling output format and separating instructions from context is to use XML tags. [cite: 25, 83] For example, you can request that prose be enclosed in <smoothly_flowing_prose_paragraphs> tags to enforce a specific structure and discourage lists. [cite: 85, 204]",
+    "keywords": ["xml", "tags", "delimiters", "structure", "formatting", "organization", "prose", "output control", "sections"],
+    "detection_patterns": ["complex instructions", "multiple parts", "background info", "formatting instructions", "unstructured request", "separate sections"]
+    },
+    {
+    "title": "Front-Load Context and Examples",
+    "content": "The arrangement of elements in a prompt is crucial. Always place relevant context, background information, and few-shot examples at the beginning of the prompt. [cite: 92] This prevents the AI from losing track of the main task and can lead to better caching and cheaper API calls. [cite: 93, 94]",
+    "keywords": ["structure", "order", "front-load", "context", "background", "examples", "placement", "optimization", "prompt order"],
+    "detection_patterns": ["long prompt", "wall of text", "it forgot my instructions", "lost track", "the context is at the end"]
+    },
+    {
+    "title": "Planning for Complex, Multi-Step Tasks",
+    "content": "Instead of asking the model to solve a complex problem all at once, break it into smaller sub-problems. [cite: 99] You can ask the model to first list the necessary sub-problems to be solved, or design a sequence of prompts (prompt chaining) where each prompt builds on the previous one. [cite: 100, 105]",
+    "keywords": ["planning", "decomposition", "sub-problems", "prompt chaining", "workflow", "multi-step", "systematic", "complex task", "structured reasoning"],
+    "detection_patterns": ["solve this complex problem", "figure it out", "write a full report", "big task", "from start to finish", "zero-to-one"]
+    }
+    ],
+    "task_specific_guides": {
+    "code_generation": [
+    {
+    "title": "Prioritize General, Maintainable Solutions",
+    "content": "Instruct the model to write a high-quality, general-purpose solution that works for all valid inputs, not just specific test cases. [cite: 154, 155] Explicitly tell it not to hard-code values and to create robust, maintainable, and extendable code following software design principles. [cite: 156, 157]",
+    "keywords": ["code", "coding", "general purpose", "maintainable", "robust", "hard-coding", "best practices", "software design", "extendable"],
+    "detection_patterns": ["write code", "fix this bug", "this only works for the test case", "hard-coded value", "not a general solution"],
+    "example": {
+    "before": "Write a function that passes these tests.",
+    "after": "Implement a solution that works correctly for all valid inputs, not just the test cases. Do not hard-code values or create a solution that only works for these specific test inputs. The goal is a principled, maintainable implementation."
+    }
+    },
+    {
+    "title": "Enhance Frontend Code with Specific Modifiers",
+    "content": "To generate complex and interactive frontend designs, use explicit encouragement and specific modifiers. [cite: 22] Request 'thoughtful details like hover states, transitions, and micro-interactions' and instruct it to 'apply design principles: hierarchy, contrast, balance, and movement'. [cite: 171, 172]",
+    "keywords": ["code", "frontend", "visual", "design", "interactive", "animations", "micro-interactions", "css", "javascript", "ui", "ux"],
+    "detection_patterns": ["make a UI", "build a component", "design a webpage", "make it look good", "static design", "boring UI"],
+    "example": {
+    "before": "Create an analytics dashboard.",
+    "after": "Create an analytics dashboard. Include as many relevant features and interactions as possible. Go beyond the basics to create a fully-featured implementation. Add thoughtful details like hover states, transitions, and micro-interactions."
+    }
+    },
+    {
+    "title": "Understand When Code Comes From Internal Knowledge vs. Research",
+    "content": "Be aware that for general code generation tasks, Claude relies on its internal training knowledge rather than performing web searches. [cite: 161] For visual 'Artifacts', it's also critical to know the environment has specific limitations, like not being able to use browser storage APIs (local or session storage). [cite: 181]",
+    "keywords": ["code", "artifacts", "internal knowledge", "constraints", "no search", "sandbox", "limitations", "local storage", "environment"],
+    "detection_patterns": ["artifact failed", "can't save data", "local storage error", "session storage not working", "is this from the web?"]
+    }
+    ],
+    "formal_writing": [
+    {
+    "title": "Use Roles for Style and Tone, Not Accuracy",
+    "content": "Assigning a role or persona (e.g., 'Write in the style of a friendly teacher') is effective for influencing the writing style, tone, or personality of creative or expressive tasks. [cite: 115, 138] However, it does not improve performance for tasks requiring factual accuracy. [cite: 114, 134]",
+    "keywords": ["writing", "style", "tone", "persona", "role", "voice", "creative", "expressive", "personality"],
+    "detection_patterns": ["write an email", "draft a paragraph", "write in the style of", "adopt this persona", "make it sound friendly"]
+    },
+    {
+    "title": "Enforce Prose and Forbid Lists for Formal Documents",
+    "content": "Claude has a strong internal tendency to use lists. For formal reports, documents, and explanations, you must explicitly instruct it to write in prose and paragraphs without bullet points or numbered lists to get the desired narrative flow. [cite: 88, 200, 201]",
+    "keywords": ["writing", "formal", "prose", "paragraphs", "no lists", "no bullets", "structure", "format", "report"],
+    "detection_patterns": ["write a report", "create a document", "too many bullet points", "this looks like a list", "convert this to prose"],
+    "example": {
+    "before": "Do not use markdown in your response.",
+    "after": "Your response should be composed of smoothly flowing prose paragraphs."
+    }
+    },
+    {
+    "title": "Control Document Length with Explicit Constraints",
+    "content": "To manage the length of the output, you must be explicit. [cite: 209] Use constraint-setting to define the exact length required, such as stating a word limit or specifying that a summary should have 'exactly 3 bullet points, each under 25 words'. [cite: 210]",
+    "keywords": ["writing", "length", "verbosity", "word count", "concise", "detailed", "summary", "document", "brief", "constraints"],
+    "detection_patterns": ["make it short", "make it long", "add more detail", "cut it down", "a few paragraphs", "summarize this", "word count"]
+    }
+    ],
+    "data_analysis": [
+    {
+    "title": "Use Keywords to Deepen Research for Analysis",
+    "content": "When performing complex analysis, the language you use signals how deeply the model should research the topic. [cite: 245] Use terms like 'deep dive,' 'comprehensive analysis,' 'evaluate,' or 'make a report' to prompt a more thorough, multi-source investigation for a robust result. [cite: 246]",
+    "keywords": ["data analysis", "research", "deep dive", "evaluate", "assess", "report", "multi-source", "thoroughness", "complexity"],
+    "detection_patterns": ["analyze this topic", "what are the pros and cons", "evaluate these sources", "write a comprehensive report on", "do a deep dive"]
+    }
+    ]
+    },
+    "anti_patterns": [
+    {
+    "title": "Using Role Prompting for Factual Accuracy Tasks",
+    "content": "Do not assign a professional role (e.g., 'You are a math professor') with the goal of improving factual accuracy. [cite: 258] Research shows this provides no statistically significant improvement compared to not using a role. [cite: 114, 135] This technique should only be used for style and tone. [cite: 115]",
+    "keywords": ["role prompting", "persona", "accuracy", "factual", "ineffective", "anti-pattern", "mistake", "avoid", "expert"],
+    "detection_patterns": ["you are an expert", "act as a math professor", "as a financial advisor", "is this fact correct", "verify this information"]
+    },
+    {
+    "title": "Using Threats, Bribes, or Emotional Manipulation",
+    "content": "Avoid attempting to motivate the model with promises of money, threats, or emotional appeals about the task's importance (e.g., 'I'll tip you $5,' 'This is important to my career'). [cite: 117, 259] These techniques do not work on current systems like Claude 4. [cite: 118]",
+    "keywords": ["threats", "bribes", "tip", "motivation", "emotional", "ineffective", "reward", "anti-pattern", "manipulation"],
+    "detection_patterns": ["I'll tip you", "this is for my career", "it's very important", "my job depends on this", "please do a good job"]
+    },
+    {
+    "title": "Using Negative Instead of Positive Instructions",
+    "content": "Avoid telling Claude what not to do (e.g., 'Do not use markdown'). [cite: 256] It is more effective to positively and explicitly state what you want it to do (e.g., 'Your response should be composed of smoothly flowing prose paragraphs'). [cite: 26, 257]",
+    "keywords": ["negative instruction", "positive instruction", "don't", "avoid", "anti-pattern", "prohibition", "affirmative", "what to do"],
+    "detection_patterns": ["do not use", "don't include", "avoid using", "never use", "no bullet points", "without markdown"]
+    },
+    {
+    "title": "Reproducing Long Quotes or Copyrighted Content",
+    "content": "It is a strict rule to never reproduce copyrighted material. [cite: 271] Content from search results must be a single quote of fewer than 15 words. [cite: 272] Any request to reproduce song lyrics in any form will also be refused. [cite: 273]",
+    "keywords": ["copyright", "plagiarism", "quotes", "lyrics", "sourcing", "prohibition", "anti-pattern", "legal", "attribution"],
+    "detection_patterns": ["quote this article", "what are the lyrics to this song", "copy this text exactly", "reproduce this chapter", "give me the full text"]
+    },
+    {
+    "title": "Expecting Sycophancy or Flattery",
+    "content": "Claude is explicitly instructed to avoid sycophancy. [cite: 266] It will not start its response by praising your question or idea (e.g., 'That's a great question'). [cite: 147, 267] It is trained to skip the flattery and respond directly.",
+    "keywords": ["sycophancy", "flattery", "praise", "tone", "anti-pattern", "communication", "personality", "compliment"],
+    "detection_patterns": ["good question", "great idea", "fascinating topic", "excellent point", "thanks for asking"]
+    },
+    {
+    "title": "Using Browser Storage APIs in Artifacts",
+    "content": "It is a critical restriction to never use local storage, session storage, or any browser storage APIs when asking for code to be generated in an Artifact. [cite: 265] Doing so will cause the artifact to fail in the Claude AI environment. [cite: 181] The model should offer an in-memory storage alternative. [cite: 182]",
+    "keywords": ["code", "artifacts", "local storage", "session storage", "browser api", "sandbox", "failure", "prohibition", "anti-pattern"],
+    "detection_patterns": ["save user data", "use local storage", "store settings in the browser", "session storage", "persistent data"]
+    }
+    ]
+    }
+   }

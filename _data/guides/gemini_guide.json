@@ -1,0 +1,162 @@
+{
+    "platform": "Gemini 2.5",
+    "version": "1.0",
+    "guide": {
+      "principles": [
+        {
+          "title": "Provide Clear, Specific Instructions and Commands",
+          "content": "An effective and efficient way to customize model behavior is to provide clear and specific instructions. Always include a verb or command as part of the task; this is considered the most important component of a prompt. Write in natural language, expressing complete thoughts in full sentences.",
+          "keywords": ["clarity", "specific", "direct", "command", "verb", "instruction", "task", "natural language", "explicit"],
+          "detection_patterns": ["bad response", "wrong answer", "this isn't what I wanted", "unclear instructions", "how do I ask correctly?", "not specific enough"]
+        },
+        {
+          "title": "Include Detailed Context and Constraints",
+          "content": "Provide as much context as possible to help the model understand the constraints and necessary details needed to solve a problem. You can personalize the output with information from your own files by referencing them (e.g., using '@[file name]'). Also, give constraints such as character count limits or the number of options to generate.",
+          "keywords": ["context", "constraints", "background", "scope", "details", "limit", "length", "file reference", "personalization", "data"],
+          "detection_patterns": ["too generic", "make it shorter", "make it longer", "how do I add my own document?", "it doesn't understand my project", "limit the word count"]
+        },
+        {
+          "title": "Use Few-Shot Examples to Guide the Model",
+          "content": "Including a few relevant examples (few-shot prompting) is highly recommended to show the model the desired output pattern, style, or format. This is more effective than zero-shot prompts (no examples) for regulating the formatting, phrasing, and scoping of model responses. Show a positive pattern to follow rather than an anti-pattern to avoid.",
+          "keywords": ["few-shot", "examples", "pattern", "guidance", "zero-shot", "regulate output", "style", "formatting", "scoping"],
+          "detection_patterns": ["wrong format", "I need it in JSON", "follow this style", "the structure is wrong", "can you show me an example?", "copy this pattern"]
+        },
+        {
+          "title": "Iterate and Refine Your Prompts",
+          "content": "Prompt design is often an iterative process. If the initial results are unsatisfactory, fine-tune your prompts by trying different phrasing, changing the order of content, or using follow-up prompts in a conversational manner to yield better results.",
+          "keywords": ["iteration", "refinement", "conversation", "rephrase", "fine-tune", "feedback loop", "adjust", "optimize"],
+          "detection_patterns": ["how to improve this prompt?", "make this better", "refine this", "that's close but not quite", "let's try again", "can we change this?"]
+        },
+        {
+          "title": "Employ Advanced Techniques for Complex Reasoning",
+          "content": "For highly complex tasks, particularly in reasoning and math, combine prompts with advanced techniques. Gemini Ultra achieves its highest accuracy using approaches like Chain-of-Thought (CoT) prompting and self-consistency to deal with model uncertainty and improve performance.",
+          "keywords": ["advanced", "complex tasks", "reasoning", "chain-of-thought", "cot", "self-consistency", "logic", "math", "accuracy", "mmlu"],
+          "detection_patterns": ["the logic is wrong", "incorrect calculation", "this math is wrong", "solve this step-by-step", "it's not thinking correctly", "complex problem"]
+        },
+        {
+          "title": "Break Down Complex Tasks",
+          "content": "For use cases that require complex prompts, manage complexity by breaking the request down into simpler components. You can create one prompt per instruction or use prompt chaining, where the output of one prompt becomes the input for the next sequential step.",
+          "keywords": ["breakdown", "complexity", "prompt chaining", "sequential tasks", "sub-tasks", "manage", "step-by-step"],
+          "detection_patterns": ["too many instructions", "it missed a step", "the prompt is too long", "how to handle multiple steps?", "can you do A then B?", "it only did part of it"]
+        }
+      ],
+      "structural_elements": [
+        {
+          "title": "The Four Core Components (PTCF)",
+          "content": "Effective prompts often consider four main areas: Persona (defining a role for the AI), Task (the specific action requested), Context (background information), and Format (the desired output structure). Using a few of these components will help improve the output.",
+          "keywords": ["persona", "task", "context", "format", "ptcf", "structure", "components", "prompt design", "framework"],
+          "detection_patterns": ["how to write a good prompt?", "prompting basics", "what should I include in a prompt?", "prompt writing guide", "prompt template", "give me a role"]
+        },
+        {
+          "title": "Use Prefixes and Delimiters",
+          "content": "Use prefixes to signal semantically meaningful parts of the prompt to the model. An output prefix like 'JSON:' gives the model information about the expected response, while input prefixes like 'Text:' signal the input content. Use delimiters like backticks or XML tags to clearly separate instructions from text to be processed.",
+          "keywords": ["delimiters", "prefixes", "formatting", "structure", "labels", "tags", "input prefix", "output prefix", "markdown", "separation"],
+          "detection_patterns": ["it's ignoring my instructions", "confusing instructions and context", "how to separate the text?", "how do I format my input?", "use this as input"]
+        },
+        {
+          "title": "Maintain Consistent Formatting in Examples",
+          "content": "It is essential to maintain consistent formatting across all few-shot examples to avoid responses with undesired formats. Pay close attention to consistency in elements like XML tags, white spaces, newlines, and example splitters.",
+          "keywords": ["consistency", "few-shot", "examples", "formatting", "structure", "whitespace", "newlines", "xml tags"],
+          "detection_patterns": ["my examples are not working", "the output format is messy", "inconsistent results", "the examples are being ignored", "formatting is inconsistent"]
+        }
+      ],
+      "task_specific_guides": {
+        "code_generation": [
+          {
+            "title": "Specify Language, Libraries, and Frameworks",
+            "content": "Always state the programming language and any specific frameworks or libraries the code should use. This ensures the generated code is accurate and relevant to your technology stack. Examples include generating MySQL queries, TiKZ diagrams, or Matplotlib code.",
+            "keywords": ["code", "coding", "programming", "language", "library", "framework", "python", "javascript", "react", "mysql", "matplotlib", "tikz"],
+            "example": {
+              "before": "Create code for a checklist.",
+              "after": "I am a retail manager and I need to create a checklist for my opening and closing duties. Create a template in Google Sheets with columns for opening and closing duties from @[Onboarding New Hire Information]."
+            },
+            "detection_patterns": ["wrong programming language", "I need this in Python", "use the React library", "this code is not compatible", "framework error", "how to specify a library?"]
+          },
+          {
+            "title": "Request Code Explanations and Debugging",
+            "content": "Leverage Gemini's reasoning capabilities to understand code. Prompt it to explain where a user went wrong in a solution, provide a corrected version, and describe the logic in detail. This is useful for debugging and verification.",
+            "keywords": ["debug", "explain", "code explanation", "reasoning", "verify", "correct", "error analysis", "logic"],
+            "detection_patterns": ["debug this code", "why is my code not working?", "explain this function", "find the error in my code", "what does this code do?", "fix this bug"]
+          }
+        ],
+        "formal_writing": [
+          {
+            "title": "Define Audience and Tone Explicitly",
+            "content": "Tailor your prompts to suit your intended audience. Explicitly define the desired tone, such as formal, professional, motivating, or optimistic, to ensure the output is appropriate for the context, like an email to leadership or a company-wide memo.",
+            "keywords": ["writing", "formal", "professional", "document", "tone", "audience", "memo", "email", "report", "business"],
+            "detection_patterns": ["make it more professional", "this sounds too casual", "change the tone", "write this for an executive", "this is for a formal report"]
+          },
+          {
+            "title": "Specify a Clear Format and Structure",
+            "content": "Instruct the model on the required format for the output, such as a table, bulleted list, executive summary, or paragraph. This is a core component of effective prompts for structured writing.",
+            "keywords": ["format", "structure", "template", "bullet points", "table", "summary", "outline", "layout"],
+            "detection_patterns": ["format as a memo", "I need a report structure", "use bullet points", "put this in a table", "create an outline for me"]
+          }
+        ],
+        "creative_writing": [
+          {
+            "title": "Assign a Persona or Role to Boost Creativity",
+            "content": "To encourage creativity, assign a role to the model. Start your prompt with language like, 'You are the head of a creative department...' or 'I'm a marketing leader...' to guide the model towards a more creative and stylized output.",
+            "keywords": ["creative", "writing", "persona", "role", "ideation", "brainstorming", "storytelling", "advertising", "marketing", "script"],
+            "detection_patterns": ["make it more creative", "this is too boring", "I need a unique voice", "write like a pirate", "act as a marketing expert", "give it a personality"]
+          },
+          {
+            "title": "Use Constraints to Focus Creative Output",
+            "content": "Provide specific constraints to generate focused creative results. Include details in your prompt such as character count limits, the number of options to generate, or stylistic guidelines (e.g., 'modern and playful', 'retro-cool').",
+            "keywords": ["constraints", "creativity", "style", "limit", "word count", "options", "guidelines", "focus", "ideation"],
+            "detection_patterns": ["too many ideas", "give me just 3 options", "limit it to 50 words", "I need more specific ideas", "the output is too broad"]
+          }
+        ],
+        "reasoning_and_analysis": [
+          {
+            "title": "Use Chain-of-Thought (CoT) for Complex Problems",
+            "content": "For tasks requiring complex reasoning, such as math or logic problems, use Chain-of-Thought (CoT) prompting. This technique encourages the model to generate intermediate reasoning steps before arriving at the final answer, significantly improving accuracy.",
+            "keywords": ["reasoning", "analysis", "chain-of-thought", "cot", "step-by-step", "logic", "math", "complex problems", "deduction"],
+            "detection_patterns": ["show your work", "explain your reasoning", "how did you get that answer?", "think step by step", "the final answer is wrong"]
+          },
+          {
+            "title": "Strictly Constrain the Model to Provided Data",
+            "content": "When analyzing a specific document or dataset, explicitly instruct the model to use only the provided information. Use phrases like 'Answer the question using the text below' and 'Respond with only the text provided' to prevent it from using general knowledge and ensure a factually grounded analysis.",
+            "keywords": ["data analysis", "context", "constraint", "document analysis", "grounding", "source material", "rag", "summarization"],
+            "example": {
+              "before": "What should I do to fix my disconnected wifi? The light on my Google Wifi router is yellow and blinking slowly.",
+              "after": "Answer the question using the text below. Respond with only the text provided. Question: What should I do to fix my disconnected wifi? The light on my Google Wifi router is yellow and blinking slowly. Text: Color: Slowly pulsing yellow What it means: There is a network error. What to do: Check that the Ethernet cable is connected to both your router and your modem and both devices are turned on...."
+            },
+            "detection_patterns": ["only use the text I provided", "don't use outside knowledge", "stick to the document", "it's adding information", "summarize only this document"]
+          }
+        ]
+      },
+      "anti_patterns": [
+        {
+          "title": "Avoid Vague and Ambiguous Language",
+          "content": "Be concise and avoid complexity. Prompts with vague instructions can be challenging for the model to interpret and may not produce the desired outcome. State your request in brief but specific language.",
+          "keywords": ["vague", "ambiguous", "generic", "unspecific", "mistake", "avoid", "imprecise", "unclear"],
+          "detection_patterns": ["improve this", "make it better", "fix it", "just do something", "this is vague"]
+        },
+        {
+          "title": "Do Not Rely on Models for Factual Information",
+          "content": "Avoid relying on models to generate factual information without verification. Generative AI is still new and can sometimes have unpredictable responses. Always review outputs for clarity, relevance, and accuracy before putting them into action.",
+          "keywords": ["hallucination", "factual accuracy", "verification", "fact-check", "unreliable", "mistake", "warning"],
+          "detection_patterns": ["is this factually correct?", "verify this information", "are you sure about that?", "where did you get that fact?", "check your sources", "that's not true"]
+        },
+        {
+          "title": "Avoid Using Negative Instructions (Anti-Patterns)",
+          "content": "When providing examples, showing the model a positive pattern to follow is more effective than showing an anti-pattern to avoid. For instance, instead of saying 'Don't end haikus with a question,' it's better to provide examples of well-formed haikus.",
+          "keywords": ["negative instruction", "anti-pattern", "positive pattern", "avoid", "don't", "prohibition", "ineffective"],
+          "detection_patterns": ["stop doing that", "don't include X", "I said not to do that", "it's not following my negative instructions", "avoid using these words"]
+        },
+        {
+          "title": "Do Not Omit a Clear Command or Verb",
+          "content": "Always remember to include a verb or command as part of your task, as this is considered the most important component of a prompt. Simply providing text without a clear action for the model to perform is an ineffective strategy.",
+          "keywords": ["command", "verb", "instruction", "missing action", "task", "mistake", "omission"],
+          "detection_patterns": ["user provided text with no command", "no clear task", "what should I do with this?", "missing instruction", "prompt has no verb"]
+        },
+        {
+          "title": "Avoid Inconsistent Formatting in Few-Shot Examples",
+          "content": "You must avoid inconsistent formatting in few-shot examples to prevent undesired response formats. Ensure that the structure, including elements like XML tags, white spaces, and newlines, is the same across all provided examples.",
+          "keywords": ["inconsistent", "formatting", "few-shot", "example error", "mistake", "structure", "unstructured"],
+          "detection_patterns": ["the format of my examples is different", "inconsistent example structure", "my examples are not formatted the same way", "the spacing is off in my examples"]
+        }
+      ]
+    }
+  }

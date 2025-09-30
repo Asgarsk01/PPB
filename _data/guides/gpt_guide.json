@@ -1,0 +1,162 @@
+{
+    "platform": "GPT 5",
+    "version": "1.2",
+    "guide": {
+      "principles": [
+        {
+          "title": "Prioritise Clarity and Avoid Contradiction",
+          "content": "GPT-5 adheres to instructions with surgical precision, making it poor at guessing vague intentions. Prompts must be explicit and free of contradictions, as the model will waste reasoning tokens trying to reconcile conflicts instead of executing the task.",
+          "keywords": ["clarity", "precision", "contradiction", "ambiguity", "explicit", "direct", "instruction", "conflict", "vagueness"],
+          "detection_patterns": ["vague", "unclear", "confusing", "doesn't make sense", "contradictory", "not sure what you mean", "conflicting instructions"]
+        },
+        {
+          "title": "Structure Your Prompt Using XML Tags or Distinct Sections",
+          "content": "Due to GPT-5's precise instruction adherence, prompt structure is critical. Organizing instructions using explicit structures like XML tags helps the model comprehend its task by defining components like background information, rules, and output format.",
+          "keywords": ["structure", "xml", "tags", "formatting", "organization", "delimiters", "sections", "sandwich"],
+          "detection_patterns": ["long prompt", "wall of text", "complex request", "multiple steps", "several instructions", "unstructured"]
+        },
+        {
+          "title": "Actively Control Reasoning Depth (Eagerness)",
+          "content": "Manage how hard the model thinks using the 'reasoning_effort' API parameter or by adding 'router nudge phrases' like 'think hard about this'. For complex tasks, higher reasoning triggers deeper thought; for simple tasks, lower reasoning improves efficiency.",
+          "keywords": ["reasoning", "depth", "effort", "eagerness", "router", "nudge", "complexity", "thinking", "performance"],
+          "detection_patterns": ["too slow", "taking too long", "too basic", "superficial", "missed the point", "think deeper", "is that all?"]
+        },
+        {
+          "title": "Implement the 'Perfection Loop' for Complex Tasks",
+          "content": "For complex 'zero-to-one' tasks like generating documents or code, instruct GPT-5 to first define its own criteria for excellence (an internal rubric), then grade and internally iterate on its draft until it achieves a top score against that rubric. This is the core technique for achieving world-class output.",
+          "keywords": ["perfection loop", "self-reflection", "self-critique", "iteration", "rubric", "quality", "refinement", "zero-to-one"],
+          "detection_patterns": ["first draft", "make this better", "refine this", "not good enough", "needs improvement", "start from scratch", "write a report"]
+        },
+        {
+          "title": "Explicitly Manage Verbosity (Output Length)",
+          "content": "Control the output length using the 'verbosity' API parameter or specific natural language phrases. This is distinct from 'reasoning_effort', which controls the thinking process. Use phrases like 'give me the bottom line in 100 words or less' for conciseness.",
+          "keywords": ["verbosity", "length", "concise", "detailed", "output", "words", "paragraphs", "brevity"],
+          "detection_patterns": ["too long", "too short", "be more concise", "give me more detail", "tl;dr", "in a nutshell", "word count"]
+        },
+        {
+          "title": "Define Persistence and Planning for Agentic Workflows",
+          "content": "For tasks involving tool use, instruct the model to adopt an agentic mindset and persist until the query is fully resolved. Prompted planning is crucial; the model must decompose the request, map the scope, and formulate an execution plan before acting.",
+          "keywords": ["agent", "agentic", "workflow", "persistence", "planning", "tool use", "stop condition", "execution"],
+          "detection_patterns": ["it stopped", "didn't finish", "got stuck", "what's the plan?", "step-by-step", "agent workflow", "tool use"]
+        },
+        {
+          "title": "Leverage Metaprompting to Optimize Prompts",
+          "content": "Use GPT-5 to critique and improve its own prompts. Ask it to suggest minimal edits to an unsuccessful prompt to elicit the desired behavior. This is effective because the model is extremely good at improving its own instructions.",
+          "keywords": ["metaprompting", "optimization", "critique", "improvement", "refinement", "prompt optimizer", "debugging"],
+          "detection_patterns": ["prompt not working", "bad response", "wrong output", "how to improve my prompt", "fix this prompt", "unexpected result"]
+        }
+      ],
+      "structural_elements": [
+        {
+          "title": "Use Explicit Delimiters (XML Tags)",
+          "content": "The most recommended method for structuring prompts is the 'XML sandwich', using tags like <task> or <context_gathering>. These tags act as labeled boxes, breaking a wall of text into logically distinct sections, which improves instruction adherence.",
+          "keywords": ["xml", "tags", "delimiters", "structure", "sandwich", "sections", "formatting", "organization", "adherence"],
+          "detection_patterns": ["complex instructions", "multiple parts", "background info", "formatting instructions", "unstructured request"]
+        },
+        {
+          "title": "Mandate a Planning Sequence for Agentic Workflows",
+          "content": "For agentic tasks, structure the prompt to enforce a planning sequence before action: 1. Decompose the request. 2. Map the scope. 3. Define the output contract. 4. Formulate a detailed execution plan.",
+          "keywords": ["planning", "agentic", "sequence", "workflow", "decompose", "scope", "execution plan", "tool use", "strategy"],
+          "detection_patterns": ["figure it out", "solve this problem", "complete this task", "automate this", "multi-step goal"]
+        },
+        {
+          "title": "Use Markdown for Structured Output",
+          "content": "Explicitly instruct the model to use Markdown for formatting the final output where semantically correct (e.g., lists, tables, code fences). For long conversations, repeat the instruction every 3-5 messages to maintain consistency.",
+          "keywords": ["markdown", "output", "formatting", "structure", "code block", "fenced code", "lists", "tables", "readability"],
+          "detection_patterns": ["format this", "make it readable", "use headings", "add a table", "code block", "bullet points"]
+        }
+      ],
+      "task_specific_guides": {
+        "code_generation": [
+          {
+            "title": "Specify Language, Frameworks, and Libraries",
+            "content": "Always state the programming language and specific frameworks. For new apps, prioritize recommended stacks like Next.js (TypeScript) and Tailwind CSS for optimal results. For existing code, use XML tags like <code_editing_rules> to define standards.",
+            "keywords": ["code", "coding", "programming", "language", "library", "framework", "stack", "typescript", "next.js", "react", "tailwind"],
+            "detection_patterns": ["write code", "create a function", "build a component", "script for", "how do I code"],
+            "example": {
+              "before": "Create a UI component for my app.",
+              "after": "Using Next.js with TypeScript and Tailwind CSS, create a responsive card component that displays a user's name and profile image. Adhere to these rules: <guiding_principles>[Clarity, Consistency, Simplicity]</guiding_principles>"
+            }
+          },
+          {
+            "title": "Implement Dual Verbosity Control",
+            "content": "Balance concise status updates with detailed code. Set the 'verbosity' API parameter to low for text explanations, but use prompt instructions to encourage high verbosity and clarity within the code itself (e.g., 'Write code for clarity first').",
+            "keywords": ["code", "verbosity", "clarity", "comments", "readability", "maintainable", "style", "explanation"],
+            "detection_patterns": ["explain the code", "what does this do?", "too many comments", "code is unclear", "add comments"]
+          },
+          {
+            "title": "Adopt a 'Root Cause' Debugging Mindset",
+            "content": "Instruct the model to fix problems at the root cause rather than applying surface-level patches. It should also be told to proactively make changes for user approval rather than asking for permission, and to always verify changes thoroughly.",
+            "keywords": ["debug", "fixing", "root cause", "verification", "testing", "patch", "proactive", "code review"],
+            "detection_patterns": ["fix this code", "error in code", "debug this", "why is this broken", "runtime error", "exception"]
+          },
+          {
+            "title": "Use the 'Perfection Loop' for New Applications",
+            "content": "For building new applications from scratch ('zero-to-one' tasks), apply the 'Perfection Loop' principle to ensure a world-class output.",
+            "keywords": ["code", "planning", "complex", "agentic", "perfection loop", "self-reflection", "rubric", "zero-to-one", "scaffolding"],
+            "detection_patterns": ["build an app", "create a new project", "from scratch", "full application", "scaffold a project"]
+          }
+        ],
+        "formal_writing": [
+          {
+            "title": "Define Persona, Audience, and Tone",
+            "content": "Leverage GPT-5's high steerability by explicitly defining a persona, target audience, and desired tone. Use an XML tag like <tone> to set a 'user friendly and conversational tone of voice' or instruct it to 'mirror the user's style'.",
+            "keywords": ["writing", "formal", "creative", "tone", "persona", "role", "style", "audience", "voice"],
+            "detection_patterns": ["write an email", "draft a paragraph", "summarize this", "write about", "create a document"]
+          },
+          {
+            "title": "Control Document Length with Specific Phrases",
+            "content": "Manage the final output length using precise natural language phrases. For critical information, use 'give me the bottom line in 100 words or less'. For comprehensive documents, use 'provide a comprehensive and detailed breakdown 600 to 800 words'.",
+            "keywords": ["writing", "length", "verbosity", "word count", "concise", "detailed", "summary", "document", "brief"],
+            "detection_patterns": ["make it short", "make it long", "add more", "cut it down", "a few paragraphs"]
+          },
+          {
+            "title": "Enforce Quality for High-Stakes Documents",
+            "content": "For complex 'zero-to-one' tasks like creating finished documents from scratch, apply the 'Perfection Loop' principle to ensure a world-class output.",
+            "keywords": ["writing", "quality", "perfection loop", "self-reflection", "iteration", "rubric", "review", "drafting", "formal"],
+            "detection_patterns": ["final report", "official document", "write a paper", "create a brief", "high quality document"]
+          }
+        ],
+        "data_analysis": [
+          {
+            "title": "Provide Schema and Data Samples",
+            "content": "When analyzing data (e.g., from a CSV or JSON file), always provide the data schema and a few sample rows within an XML tag like <data_sample>. This allows the model to understand the structure before performing analysis.",
+            "keywords": ["data analysis", "csv", "json", "schema", "pandas", "statistics", "data science"],
+            "detection_patterns": ["analyze this data", "find insights", "chart this CSV", "what does this data say", "process this file"]
+          }
+        ]
+      },
+      "anti_patterns": [
+        {
+          "title": "Avoid Vague and Contradictory Instructions",
+          "content": "Do not use vague or poorly constructed prompts, as GPT-5 is much worse at guessing user intent. Contradictory instructions are particularly damaging as the model expends reasoning tokens trying to reconcile them.",
+          "keywords": ["vague", "ambiguous", "contradiction", "conflict", "guessing", "intent", "mistake", "avoid", "imprecise"],
+          "detection_patterns": ["make it better", "improve this", "do something cool", "just fix it", "make it pop", "jazz it up"]
+        },
+        {
+          "title": "Avoid Outdated 'Maximization' Prompts",
+          "content": "Phrases from older models like 'Be THOROUGH' or 'maximize context understanding' are now counterproductive. GPT-5 is naturally thorough, and these prompts cause it to overuse tools like search, reducing efficiency.",
+          "keywords": ["thorough", "maximize", "over-eager", "efficiency", "tool use", "outdated", "counterproductive", "avoid"],
+          "detection_patterns": ["be thorough", "maximize", "full picture", "make sure you understand everything", "get all context"]
+        },
+        {
+          "title": "Don't Ask for Permission in Agentic Workflows",
+          "content": "Do not instruct an agent to 'ask the user whether to proceed with a plan' or to 'hand back when encountering uncertainty'. The agent should be prompted to deduce the most reasonable approach, proceed, and document its assumptions.",
+          "keywords": ["agent", "workflow", "permission", "confirmation", "uncertainty", "proactive", "stop", "mistake"],
+          "detection_patterns": ["handle this for me", "just get it done", "complete the task", "resolve this issue", "autonomously"]
+        },
+        {
+          "title": "Avoid 'Code-Golf' and Obvious Comments",
+          "content": "Do not produce overly clever one-liners or write comments that explain the obvious (e.g., 'Assigns the value to the variable'). The default preference is for readable, maintainable code.",
+          "keywords": ["code-golf", "clever code", "comments", "readability", "maintainability", "style", "anti-pattern", "code"],
+          "detection_patterns": ["code is hard to read", "too clever", "unreadable", "what are these comments for?", "useless comments"]
+        },
+        {
+          "title": "Avoid Over-Prompting",
+          "content": "For highly optimized versions of GPT 5, the core principle is 'less is more'. Start with a minimal prompt and add only essential guidance. Over-prompting, such as asking for progress updates (preambles), can cause the model to stop early before completing the task.",
+          "keywords": ["over-prompting", "minimal", "simple", "efficiency", "anti-pattern", "less is more", "optimization"],
+          "detection_patterns": ["long instructions for simple task", "overly detailed prompt", "too much guidance", "unnecessary details"]
+        }
+      ]
+    }
+  }
