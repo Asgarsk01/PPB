@@ -52,67 +52,6 @@ app.get('/', (req, res) => {
     });
 });
 
-// Debug endpoint to check database schema
-app.get('/api/debug/schema', async (req, res) => {
-    try {
-        console.log('🔍 Checking database schema...');
-        
-        // Check if users table exists and get its structure
-        const { data: tables, error: tablesError } = await supabase
-            .from('information_schema.tables')
-            .select('table_name')
-            .eq('table_schema', 'public')
-            .in('table_name', ['users', 'super_coupons']);
-        
-        if (tablesError) {
-            console.error('❌ Error checking tables:', tablesError);
-            return res.status(500).json({ error: 'Failed to check tables', details: tablesError.message });
-        }
-        
-        console.log('📋 Found tables:', tables);
-        
-        // Check users table columns
-        const { data: userColumns, error: userColumnsError } = await supabase
-            .from('information_schema.columns')
-            .select('column_name, data_type, is_nullable, column_default')
-            .eq('table_name', 'users')
-            .eq('table_schema', 'public')
-            .order('ordinal_position');
-        
-        if (userColumnsError) {
-            console.error('❌ Error checking user columns:', userColumnsError);
-            return res.status(500).json({ error: 'Failed to check user columns', details: userColumnsError.message });
-        }
-        
-        console.log('📋 User table columns:', userColumns);
-        
-        // Check super_coupons table columns
-        const { data: couponColumns, error: couponColumnsError } = await supabase
-            .from('information_schema.columns')
-            .select('column_name, data_type, is_nullable, column_default')
-            .eq('table_name', 'super_coupons')
-            .eq('table_schema', 'public')
-            .order('ordinal_position');
-        
-        if (couponColumnsError) {
-            console.error('❌ Error checking coupon columns:', couponColumnsError);
-            return res.status(500).json({ error: 'Failed to check coupon columns', details: couponColumnsError.message });
-        }
-        
-        console.log('📋 Coupon table columns:', couponColumns);
-        
-        res.json({
-            tables: tables,
-            users_columns: userColumns,
-            super_coupons_columns: couponColumns
-        });
-        
-    } catch (error) {
-        console.error('❌ Schema check error:', error);
-        res.status(500).json({ error: error.message });
-    }
-});
-
 // =============================================================================
 // AUTHENTICATION ENDPOINTS
 // =============================================================================
@@ -569,13 +508,25 @@ app.post('/api/enhance', async (req, res) => {
             console.log(`✅ User has ${currentCredits} credits - proceeding with enhancement`);
         }
         
-        console.log(`🔍 Searching for guide: ${platform}`);
+        // Map frontend platform names to database platform names
+        const platformMapping = {
+            'chatgpt': 'GPT 5',
+            'gpt': 'GPT 5',
+            'openai': 'GPT 5',
+            'claude': 'Claude Sonnet 4',
+            'claude.ai': 'Claude Sonnet 4',
+            'gemini': 'Gemini 2.5',
+            'google': 'Gemini 2.5'
+        };
+        
+        const mappedPlatform = platformMapping[platform.toLowerCase()] || platform;
+        console.log(`🔍 Searching for guide: ${platform} -> ${mappedPlatform}`);
         
         // Query the prompt_guides table for the specified platform
         const { data, error } = await supabase
             .from('prompt_guides')
             .select('guide_data')
-            .eq('platform', platform)
+            .eq('platform', mappedPlatform)
             .maybeSingle();
         
         if (error) {
