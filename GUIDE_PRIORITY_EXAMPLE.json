@@ -1,0 +1,44 @@
+{
+  "platform": "Claude Sonnet 4",
+  "version": "4.1",
+  "guide": {
+    "principles": [
+      {
+        "priority": 1,
+        "title": "Be Explicit and Use Specific Modifiers",
+        "content": "Claude 4 is trained for precise instruction following...",
+        "keywords": ["explicit", "specific", "modifiers"],
+        "detection_patterns": ["vague request", "make it better", "improve this"]
+      },
+      {
+        "priority": 2,
+        "title": "Add Context and Motivation to Improve Performance",
+        "content": "Providing the background, context, or motivation...",
+        "keywords": ["context", "motivation", "background"],
+        "detection_patterns": ["lacks context", "why do you need this?"]
+      },
+      {
+        "priority": 3,
+        "title": "Use Few-Shot Examples Vigilantly",
+        "content": "Few-shot prompting, or providing 2-5 concrete examples...",
+        "keywords": ["few-shot", "examples", "demonstration"],
+        "detection_patterns": ["show me an example", "do it like this"]
+      },
+      {
+        "priority": 4,
+        "title": "Control Output Format and Structure",
+        "content": "To ensure consistent output, explicitly direct the format...",
+        "keywords": ["format", "structure", "xml", "tags"],
+        "detection_patterns": ["wrong format", "make it a paragraph"]
+      },
+      {
+        "priority": 5,
+        "title": "Leverage Thinking and Step-by-Step Reasoning",
+        "content": "For complex tasks, prompt Claude to use its thinking...",
+        "keywords": ["reasoning", "thinking", "step-by-step"],
+        "detection_patterns": ["complex problem", "think it through"]
+      }
+    ]
+  }
+}
+

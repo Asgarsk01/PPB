@@ -122,14 +122,6 @@ app.post('/api/enhance', async (req, res) => {
         if (guide_data.guide && guide_data.guide.principles) {
             const topPrinciples = selectRelevantPrinciples(prompt, guide_data.guide.principles);
             
-            // Log selected principles for debugging
-            const matchedPrinciples = topPrinciples.filter(p => p.matched).map(p => p.title);
-            if (matchedPrinciples.length > 0) {
-                console.log(`🎯 Matched principles: ${matchedPrinciples.join(', ')}`);
-            } else {
-                console.log(`📌 Using default top principles (no pattern matches)`);
-            }
-            
             topPrinciples.forEach((principle, index) => {
                 system_prompt_content += `${index + 1}. **${principle.title}**\n`;
                 system_prompt_content += `   ${principle.content}\n\n`;
@@ -161,31 +153,31 @@ app.post('/api/enhance', async (req, res) => {
             const promptLower = userPrompt.toLowerCase();
             
             // Check for code generation
-            if (/\b(code|function|api|debug|fix|script|program|algorithm|implement|bug)\b/i.test(promptLower) ||
-                /\b(javascript|python|java|react|node|sql|html|css)\b/i.test(promptLower)) {
+            if (/(code|function|api|debug|fix|script|program|algorithm|implement|bug)/.test(promptLower) ||
+                /(javascript|python|java|react|node|sql|html|css)/.test(promptLower)) {
                 return 'code_generation';
             }
             
             // Check for formal writing
-            if (/\b(write|email|document|report|letter|memo|proposal|essay|article)\b/i.test(promptLower) ||
-                /\b(formal|professional|business|academic)\b/i.test(promptLower)) {
+            if (/(write|email|document|report|letter|memo|proposal|essay|article)/.test(promptLower) ||
+                /(formal|professional|business|academic)/.test(promptLower)) {
                 return 'formal_writing';
             }
             
             // Check for creative writing
-            if (/\b(story|narrative|poem|creative|fiction|character|plot|dialogue)\b/i.test(promptLower) ||
-                /\b(imagine|invent|brainstorm|ideate)\b/i.test(promptLower)) {
+            if (/(story|narrative|poem|creative|fiction|character|plot|dialogue)/.test(promptLower) ||
+                /(imagine|invent|brainstorm|ideate)/.test(promptLower)) {
                 return 'creative_writing';
             }
             
             // Check for data analysis
-            if (/\b(analyze|data|csv|json|statistics|chart|graph|evaluate|compare)\b/i.test(promptLower) ||
-                /\b(dataset|metrics|insights|trends|visualize)\b/i.test(promptLower)) {
+            if (/(analyze|data|csv|json|statistics|chart|graph|evaluate|compare)/.test(promptLower) ||
+                /(dataset|metrics|insights|trends|visualize)/.test(promptLower)) {
                 return 'data_analysis';
             }
             
             // Check for reasoning/analysis
-            if (/\b(reasoning|logic|solve|calculate|math|problem|think|analyze)\b/i.test(promptLower)) {
+            if (/(reasoning|logic|solve|calculate|math|problem|think|analyze)/.test(promptLower)) {
                 return 'reasoning_and_analysis';
             }
             
@@ -194,9 +186,8 @@ app.post('/api/enhance', async (req, res) => {
         
         // Add task-specific guidelines if applicable
         const taskType = detectTaskType(prompt);
-        console.log(`🎯 Detected task type: ${taskType}`);
         
-        if (taskType !== 'general' && guide_data.guide.task_specific_guides && guide_data.guide.task_specific_guides[taskType]) {
+        if (taskType !== 'general' && guide_data.guide && guide_data.guide.task_specific_guides && guide_data.guide.task_specific_guides[taskType]) {
             system_prompt_content += "\n## Task-Specific Guidelines:\n\n";
             const taskGuides = guide_data.guide.task_specific_guides[taskType];
             
@@ -216,11 +207,6 @@ app.post('/api/enhance', async (req, res) => {
         
         // Add a closing instruction
         system_prompt_content += "\nApply these principles to enhance the user's prompt, making it more specific, structured, and effective for the target AI platform.";
-        
-        console.log(`📝 Meta-prompt constructed (${system_prompt_content.length} characters)`);
-        
-        // Call Azure AI to enhance the prompt
-        console.log(`🤖 Calling AI model to enhance prompt...`);
         
         // Initialize the Azure AI client
         const client = ModelClient(
@@ -252,8 +238,6 @@ app.post('/api/enhance', async (req, res) => {
         
         // Extract the enhanced prompt from the response
         const enhancedPrompt = response.body.choices[0].message.content;
-        
-        console.log(`✅ Prompt enhanced successfully`);
         
         // Return only the enhanced prompt
         res.json({
