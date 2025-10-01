@@ -129,9 +129,7 @@ app.post('/api/auth/register', async (req, res) => {
                         name: name,
                         credits_remaining: 8,
                         has_unlimited_access: false,
-                        last_credit_reset: new Date().toISOString(),
-                        created_at: new Date().toISOString(),
-                        last_used_at: new Date().toISOString()
+                        last_credit_reset: new Date().toISOString()
                     }
                 ])
                 .select();
@@ -236,9 +234,7 @@ app.post('/api/auth/login', async (req, res) => {
                             name: data.user.user_metadata?.name || email.split('@')[0],
                             credits_remaining: 8,
                             has_unlimited_access: false,
-                            last_credit_reset: new Date().toISOString(),
-                            created_at: data.user.created_at || new Date().toISOString(),
-                            last_used_at: new Date().toISOString()
+                            last_credit_reset: new Date().toISOString()
                         }
                     ]);
                 
