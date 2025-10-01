@@ -95,3 +95,10 @@ temp/
 ehthumbs.db
 Thumbs.db
 .vercel
+
+# Chrome Extension
+prompt-perfect-extensionn/
+
+# Documentation files
+*.md
+!README.md
