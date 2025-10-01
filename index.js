@@ -12,7 +12,7 @@ const app = express();
 // Azure AI Configuration
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const AI_ENDPOINT = "https://models.github.ai/inference";
-const AI_MODEL = "openai/gpt-5";
+const AI_MODEL = "openai/gpt-4.1";
 
 // Middleware to parse JSON requests
 app.use(express.json());
@@ -131,6 +131,8 @@ app.post('/api/enhance', async (req, res) => {
                     { role: "system", content: system_prompt_content },
                     { role: "user", content: prompt }
                 ],
+                temperature: 1,
+                top_p: 1,
                 model: AI_MODEL
             }
         });
