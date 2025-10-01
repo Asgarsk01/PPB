@@ -117,7 +117,10 @@ app.post('/api/auth/register', async (req, res) => {
         
         // Create user record in public.users table
         try {
-            const { error: insertError } = await supabase
+            console.log(`🔍 Attempting to insert user into public.users table: ${email}`);
+            console.log(`🔍 User ID: ${data.user.id}`);
+            
+            const { data: insertData, error: insertError } = await supabase
                 .from('users')
                 .insert([
                     {
@@ -130,16 +133,20 @@ app.post('/api/auth/register', async (req, res) => {
                         created_at: new Date().toISOString(),
                         last_used_at: new Date().toISOString()
                     }
-                ]);
+                ])
+                .select();
             
             if (insertError) {
-                console.error('⚠️ Failed to create user in public.users table:', insertError.message);
+                console.error('❌ Failed to create user in public.users table:', insertError);
+                console.error('❌ Error details:', JSON.stringify(insertError, null, 2));
                 // Don't fail the registration, just log the error
             } else {
                 console.log(`✅ User record created in public.users table: ${email}`);
+                console.log(`✅ Insert data:`, JSON.stringify(insertData, null, 2));
             }
         } catch (insertErr) {
-            console.error('⚠️ Error inserting into public.users:', insertErr.message);
+            console.error('❌ Exception inserting into public.users:', insertErr);
+            console.error('❌ Exception details:', JSON.stringify(insertErr, null, 2));
         }
         
         console.log(`✅ User registered successfully: ${email}`);
