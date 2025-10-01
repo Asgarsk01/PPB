@@ -16,13 +16,22 @@ const AI_MODEL = "openai/gpt-4.1";
 
 // CORS Configuration - Allow Chrome Extension and all origins
 app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    // Allow any origin
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    
+    // Allow specific methods
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    
+    // Allow specific headers
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    
+    // Allow credentials
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
     
     // Handle preflight requests
     if (req.method === 'OPTIONS') {
-        return res.status(200).end();
+        res.status(200).end();
+        return;
     }
     
     next();
