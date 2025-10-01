@@ -113,6 +113,35 @@ app.post('/api/auth/register', async (req, res) => {
             });
         }
         
+        console.log(`✅ User registered in auth.users: ${email}`);
+        
+        // Create user record in public.users table
+        try {
+            const { error: insertError } = await supabase
+                .from('users')
+                .insert([
+                    {
+                        id: data.user.id,
+                        email: email,
+                        name: name,
+                        credits_remaining: 8,
+                        has_unlimited_access: false,
+                        last_credit_reset: new Date().toISOString(),
+                        created_at: new Date().toISOString(),
+                        last_used_at: new Date().toISOString()
+                    }
+                ]);
+            
+            if (insertError) {
+                console.error('⚠️ Failed to create user in public.users table:', insertError.message);
+                // Don't fail the registration, just log the error
+            } else {
+                console.log(`✅ User record created in public.users table: ${email}`);
+            }
+        } catch (insertErr) {
+            console.error('⚠️ Error inserting into public.users:', insertErr.message);
+        }
+        
         console.log(`✅ User registered successfully: ${email}`);
         
         // Return success response
@@ -180,6 +209,39 @@ app.post('/api/auth/login', async (req, res) => {
         }
         
         console.log(`✅ User logged in successfully: ${email}`);
+        
+        // Check if user exists in public.users table, create if not
+        try {
+            const { data: existingUser, error: fetchError } = await supabase
+                .from('users')
+                .select('id')
+                .eq('id', data.user.id)
+                .maybeSingle();
+            
+            if (!existingUser && !fetchError) {
+                // User doesn't exist in public.users, create them
+                const { error: insertError } = await supabase
+                    .from('users')
+                    .insert([
+                        {
+                            id: data.user.id,
+                            email: email,
+                            name: data.user.user_metadata?.name || email.split('@')[0],
+                            credits_remaining: 8,
+                            has_unlimited_access: false,
+                            last_credit_reset: new Date().toISOString(),
+                            created_at: data.user.created_at || new Date().toISOString(),
+                            last_used_at: new Date().toISOString()
+                        }
+                    ]);
+                
+                if (!insertError) {
+                    console.log(`✅ Created user record in public.users table for: ${email}`);
+                }
+            }
+        } catch (err) {
+            console.error('⚠️ Error checking/creating user in public.users:', err.message);
+        }
         
         // Return success response with session information
         res.status(200).json({
