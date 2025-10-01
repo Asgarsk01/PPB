@@ -516,10 +516,14 @@ app.post('/api/enhance', async (req, res) => {
             'claude': 'Claude Sonnet 4',
             'claude.ai': 'Claude Sonnet 4',
             'gemini': 'Gemini 2.5',
-            'google': 'Gemini 2.5'
+            'google': 'Gemini 2.5',
+            // Add capitalized versions for compatibility
+            'ChatGPT': 'GPT 5',
+            'Claude': 'Claude Sonnet 4',
+            'Gemini': 'Gemini 2.5'
         };
         
-        const mappedPlatform = platformMapping[platform.toLowerCase()] || platform;
+        const mappedPlatform = platformMapping[platform] || platformMapping[platform.toLowerCase()] || platform;
         console.log(`🔍 Searching for guide: ${platform} -> ${mappedPlatform}`);
         
         // Query the prompt_guides table for the specified platform
