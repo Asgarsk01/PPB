@@ -681,7 +681,7 @@ app.post('/api/enhance', async (req, res) => {
         }
         
         // Add a closing instruction
-        system_prompt_content += "\nApply these principles to enhance the user's prompt, making it more specific, structured, and effective for the target AI platform.";
+        system_prompt_content += "\nApply these principles to enhance the user's prompt, making it more specific, structured, and effective for the target AI platform.\n\nIMPORTANT: Return ONLY the enhanced prompt text. Do not include any prefixes like 'Refined Prompt:', 'Enhanced Prompt:', or any other labels. Just return the improved prompt directly.";
         
         // Initialize the Azure AI client
         const client = ModelClient(
@@ -712,7 +712,10 @@ app.post('/api/enhance', async (req, res) => {
         }
         
         // Extract the enhanced prompt from the response
-        const enhancedPrompt = response.body.choices[0].message.content;
+        let enhancedPrompt = response.body.choices[0].message.content;
+        
+        // Clean up any unwanted prefixes that the AI might add
+        enhancedPrompt = enhancedPrompt.replace(/^(Refined Prompt:|Enhanced Prompt:|Improved Prompt:|Here's your enhanced prompt:|Here is your enhanced prompt:)\s*/i, '').trim();
         
         // =============================================================================
         // CREDIT DEDUCTION LOGIC
