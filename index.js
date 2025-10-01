@@ -100,7 +100,8 @@ app.post('/api/enhance', async (req, res) => {
             });
             
             // Sort by priority if available, otherwise keep order
-            const sortedPrinciples = allPrinciples.sort((a, b) => {
+            // Create a copy to avoid mutating the original array
+            const sortedPrinciples = [...allPrinciples].sort((a, b) => {
                 const priorityA = a.priority || 999;
                 const priorityB = b.priority || 999;
                 return priorityA - priorityB;
