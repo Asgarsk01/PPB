@@ -81,9 +81,54 @@ app.post('/api/enhance', async (req, res) => {
         // Start with a base instruction
         let system_prompt_content = "You are an expert prompt engineer. Refine the user's prompt based on these key principles:\n\n";
         
-        // Add the most important principles (top 5)
+        // Helper function: Select relevant principles based on detection patterns
+        function selectRelevantPrinciples(userPrompt, allPrinciples) {
+            const relevantPrinciples = [];
+            const promptLower = userPrompt.toLowerCase();
+            
+            // Find principles whose detection patterns match the prompt
+            allPrinciples.forEach(principle => {
+                if (principle.detection_patterns) {
+                    const isRelevant = principle.detection_patterns.some(pattern => 
+                        promptLower.includes(pattern.toLowerCase())
+                    );
+                    
+                    if (isRelevant) {
+                        relevantPrinciples.push({ ...principle, matched: true });
+                    }
+                }
+            });
+            
+            // Sort by priority if available, otherwise keep order
+            const sortedPrinciples = allPrinciples.sort((a, b) => {
+                const priorityA = a.priority || 999;
+                const priorityB = b.priority || 999;
+                return priorityA - priorityB;
+            });
+            
+            // If we have few relevant matches, add top priority principles
+            if (relevantPrinciples.length < 3) {
+                const additionalPrinciples = sortedPrinciples
+                    .filter(p => !relevantPrinciples.find(rp => rp.title === p.title))
+                    .slice(0, 5 - relevantPrinciples.length);
+                relevantPrinciples.push(...additionalPrinciples);
+            }
+            
+            return relevantPrinciples.slice(0, 5);
+        }
+        
+        // Add the most relevant principles (context-aware selection)
         if (guide_data.guide && guide_data.guide.principles) {
-            const topPrinciples = guide_data.guide.principles.slice(0, 5);
+            const topPrinciples = selectRelevantPrinciples(prompt, guide_data.guide.principles);
+            
+            // Log selected principles for debugging
+            const matchedPrinciples = topPrinciples.filter(p => p.matched).map(p => p.title);
+            if (matchedPrinciples.length > 0) {
+                console.log(`🎯 Matched principles: ${matchedPrinciples.join(', ')}`);
+            } else {
+                console.log(`📌 Using default top principles (no pattern matches)`);
+            }
+            
             topPrinciples.forEach((principle, index) => {
                 system_prompt_content += `${index + 1}. **${principle.title}**\n`;
                 system_prompt_content += `   ${principle.content}\n\n`;
@@ -110,8 +155,66 @@ app.post('/api/enhance', async (req, res) => {
             });
         }
         
+        // Helper function: Detect task type from prompt
+        function detectTaskType(userPrompt) {
+            const promptLower = userPrompt.toLowerCase();
+            
+            // Check for code generation
+            if (/\b(code|function|api|debug|fix|script|program|algorithm|implement|bug)\b/i.test(promptLower) ||
+                /\b(javascript|python|java|react|node|sql|html|css)\b/i.test(promptLower)) {
+                return 'code_generation';
+            }
+            
+            // Check for formal writing
+            if (/\b(write|email|document|report|letter|memo|proposal|essay|article)\b/i.test(promptLower) ||
+                /\b(formal|professional|business|academic)\b/i.test(promptLower)) {
+                return 'formal_writing';
+            }
+            
+            // Check for creative writing
+            if (/\b(story|narrative|poem|creative|fiction|character|plot|dialogue)\b/i.test(promptLower) ||
+                /\b(imagine|invent|brainstorm|ideate)\b/i.test(promptLower)) {
+                return 'creative_writing';
+            }
+            
+            // Check for data analysis
+            if (/\b(analyze|data|csv|json|statistics|chart|graph|evaluate|compare)\b/i.test(promptLower) ||
+                /\b(dataset|metrics|insights|trends|visualize)\b/i.test(promptLower)) {
+                return 'data_analysis';
+            }
+            
+            // Check for reasoning/analysis
+            if (/\b(reasoning|logic|solve|calculate|math|problem|think|analyze)\b/i.test(promptLower)) {
+                return 'reasoning_and_analysis';
+            }
+            
+            return 'general';
+        }
+        
+        // Add task-specific guidelines if applicable
+        const taskType = detectTaskType(prompt);
+        console.log(`🎯 Detected task type: ${taskType}`);
+        
+        if (taskType !== 'general' && guide_data.guide.task_specific_guides && guide_data.guide.task_specific_guides[taskType]) {
+            system_prompt_content += "\n## Task-Specific Guidelines:\n\n";
+            const taskGuides = guide_data.guide.task_specific_guides[taskType];
+            
+            taskGuides.forEach((guide, index) => {
+                system_prompt_content += `${index + 1}. **${guide.title}**\n`;
+                system_prompt_content += `   ${guide.content}\n`;
+                
+                // Add example if available
+                if (guide.example) {
+                    system_prompt_content += `   \n   Example Transformation:\n`;
+                    system_prompt_content += `   Before: "${guide.example.before}"\n`;
+                    system_prompt_content += `   After: "${guide.example.after}"\n`;
+                }
+                system_prompt_content += `\n`;
+            });
+        }
+        
         // Add a closing instruction
-        system_prompt_content += "Apply these principles to enhance the user's prompt, making it more specific, structured, and effective for the target AI platform.";
+        system_prompt_content += "\nApply these principles to enhance the user's prompt, making it more specific, structured, and effective for the target AI platform.";
         
         console.log(`📝 Meta-prompt constructed (${system_prompt_content.length} characters)`);
         
