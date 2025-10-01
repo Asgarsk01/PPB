@@ -14,6 +14,20 @@ const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const AI_ENDPOINT = "https://models.github.ai/inference";
 const AI_MODEL = "openai/gpt-4.1";
 
+// CORS Configuration - Allow Chrome Extension and all origins
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    
+    // Handle preflight requests
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    
+    next();
+});
+
 // Middleware to parse JSON requests
 app.use(express.json());
 
